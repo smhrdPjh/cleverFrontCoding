@@ -1,0 +1,12 @@
+.fc-day-sun a {
+  color: red;
+}
+
+.fc-day-sat a {
+  color: blue;
+}
+
+.calendarContainer {
+  width: 800px;
+  padding-left: 300px;
+}
