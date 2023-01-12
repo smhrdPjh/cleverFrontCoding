@@ -6,7 +6,27 @@
   color: blue;
 }
 
-.calendarContainer {
-  width: 800px;
-  padding-left: 300px;
+.container {
+  margin-right: 50px;
+  display: flex;
+}
+.container .calendar {
+  padding-left: 50px;
+  float: left;
+  width: 80%;
+  display: block;
+}
+.container .calendarDetail {
+  position: relative;
+  margin-top: 85px;
+  float: left;
+  width: 20%;
+  border: 0.1px solid black;
+}
+.container .calendarDetail .table {
+  border: 0.1px solid black;
+}
+.container .calendarDetail .special {
+  display: block;
+  border: 0.1px solid black;
 }

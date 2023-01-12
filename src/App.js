@@ -1,11 +1,10 @@
-import logo from "./logo.svg";
 import "./App.css";
-import Modal from "./component/Modal";
 
 import Calendar from "./component/Calendar";
+import CalendarInput from "./component/CalendarInput";
 
 function App() {
-  return <Calendar />;
+  return <CalendarInput />;
 }
 
 export default App;
