@@ -6,7 +6,7 @@ const CalendarInput = () => {
   const [PlanStartMin, setPlanStartMin] = useState(0);
   const [PlanEndHr, setPlanEndHr] = useState(0);
   const [PlanEndMin, setPlanEndMin] = useState(0);
-  const [Worker, setWorker] = useState("직원을선택 해주세요.");
+  const [Worker, setWorker] = useState("선택");
   const [PlanYear, setPlanYear] = useState(2023);
   const [PlanMonth, setPlanMonth] = useState(2);
   const [Day, setDay] = useState([]);
@@ -14,28 +14,29 @@ const CalendarInput = () => {
   const date = new Date();
   var year = date.getFullYear();
   var month = date.getMonth();
-
   const getDayOfWeek = (yyyy, mm, arrChoiceDay) => {
     console.log("1번");
     console.log("받아온것 :", arrChoiceDay);
     // console.log("요일", [arrChoiceDay]);
-    //특정date1의 마지막날        년, date1
+    //특정date1의 마지막날        년, monday
     let lastDate = new Date(yyyy, mm, 0).getDate();
+    //Monday monday Wednesday Thursday Friday Saturday Sunday
 
-    var date0;
-    var date1;
-    var date2;
-    var date3;
-    var date4;
-    var date5;
-    var date6;
-    var arrDate0 = [];
-    var arrDate1 = [];
-    var arrDate2 = [];
-    var arrDate3 = [];
-    var arrDate4 = [];
-    var arrDate5 = [];
-    var arrDate6 = [];
+    var sunday;
+    var monday;
+    var tuesday;
+    var wednesday;
+    var thursday;
+    var friday;
+    var saturday;
+
+    var arrSunday = [];
+    var arrMonday = [];
+    var arrTuesday = [];
+    var arrWednesday = [];
+    var arrThursday = [];
+    var arrFriday = [];
+    var arrSaturday = [];
 
     const week = [0, 1, 2, 3, 4, 5, 6];
 
@@ -44,107 +45,106 @@ const CalendarInput = () => {
 
     const dayOfWeek =
       week[new Date(stringYear + "-" + stringMonth + "-" + "1").getDay()];
-
+    var sequenceDay = [
+      arrSunday,
+      arrMonday,
+      arrTuesday,
+      arrWednesday,
+      arrThursday,
+      arrFriday,
+      arrSaturday,
+    ];
     if (dayOfWeek === 0) {
-      date0 = 1;
-      date1 = 2;
-      date2 = 3;
-      date3 = 4;
-      date4 = 5;
-      date5 = 6;
-      date6 = 7;
+      sunday = 1;
+      monday = 2;
+      tuesday = 3;
+      wednesday = 4;
+      thursday = 5;
+      friday = 6;
+      saturday = 7;
     } else if (dayOfWeek === 1) {
-      date1 = 1;
-      date2 = 2;
-      date3 = 3;
-      date4 = 4;
-      date5 = 5;
-      date6 = 6;
-      date0 = 7;
+      monday = 1;
+      tuesday = 2;
+      wednesday = 3;
+      thursday = 4;
+      friday = 5;
+      saturday = 6;
+      sunday = 7;
     } else if (dayOfWeek === 2) {
-      date2 = 1;
-      date3 = 2;
-      date4 = 3;
-      date5 = 4;
-      date6 = 5;
-      date0 = 6;
-      date1 = 7;
+      tuesday = 1;
+      wednesday = 2;
+      thursday = 3;
+      friday = 4;
+      saturday = 5;
+      sunday = 6;
+      monday = 7;
     } else if (dayOfWeek === 3) {
-      date3 = 1;
-      date4 = 2;
-      date5 = 3;
-      date6 = 4;
-      date0 = 5;
-      date1 = 6;
-      date2 = 7;
+      wednesday = 1;
+      thursday = 2;
+      friday = 3;
+      saturday = 4;
+      sunday = 5;
+      monday = 6;
+      tuesday = 7;
     } else if (dayOfWeek === 4) {
-      date4 = 1;
-      date5 = 2;
-      date6 = 3;
-      date0 = 4;
-      date1 = 5;
-      date2 = 6;
-      date3 = 7;
+      thursday = 1;
+      friday = 2;
+      saturday = 3;
+      sunday = 4;
+      monday = 5;
+      tuesday = 6;
+      wednesday = 7;
     } else if (dayOfWeek === 5) {
-      date5 = 1;
-      date6 = 2;
-      date0 = 3;
-      date1 = 4;
-      date2 = 5;
-      date3 = 6;
-      date4 = 7;
+      friday = 1;
+      saturday = 2;
+      sunday = 3;
+      monday = 4;
+      tuesday = 5;
+      wednesday = 6;
+      thursday = 7;
     } else if (dayOfWeek === 6) {
-      date6 = 1;
-      date0 = 2;
-      date1 = 3;
-      date2 = 4;
-      date3 = 5;
-      date4 = 6;
-      date5 = 7;
+      saturday = 1;
+      sunday = 2;
+      monday = 3;
+      tuesday = 4;
+      wednesday = 5;
+      thursday = 6;
+      friday = 7;
     }
 
     for (let i = 0; i < lastDate; i += 7) {
-      arrDate0.push(date0 + i);
-      arrDate1.push(date1 + i);
-      arrDate2.push(date2 + i);
-      arrDate3.push(date3 + i);
-      arrDate4.push(date4 + i);
-      arrDate5.push(date5 + i);
-      arrDate6.push(date6 + i);
+      arrSunday.push(sunday + i);
+      arrMonday.push(monday + i);
+      arrTuesday.push(tuesday + i);
+      arrWednesday.push(wednesday + i);
+      arrThursday.push(thursday + i);
+      arrFriday.push(friday + i);
+      arrSaturday.push(saturday + i);
     }
 
-    if (arrDate0[arrDate0.length - 1] > lastDate) {
-      arrDate0.splice(arrDate0.length - 1);
+    if (arrSunday[arrSunday.length - 1] > lastDate) {
+      arrSunday.splice(arrSunday.length - 1);
     }
 
-    if (arrDate1[arrDate1.length - 1] > lastDate) {
-      arrDate1.splice(arrDate1.length - 1);
+    if (arrMonday[arrMonday.length - 1] > lastDate) {
+      arrMonday.splice(arrMonday.length - 1);
     }
-    if (arrDate2[arrDate2.length - 1] > lastDate) {
-      arrDate2.splice(arrDate2.length - 1);
+    if (arrTuesday[arrTuesday.length - 1] > lastDate) {
+      arrTuesday.splice(arrTuesday.length - 1);
     }
-    if (arrDate3[arrDate3.length - 1] > lastDate) {
-      arrDate3.splice(arrDate3.length - 1);
+    if (arrWednesday[arrWednesday.length - 1] > lastDate) {
+      arrWednesday.splice(arrWednesday.length - 1);
     }
-    if (arrDate4[arrDate4.length - 1] > lastDate) {
-      arrDate4.splice(arrDate4.length - 1);
+    if (arrThursday[arrThursday.length - 1] > lastDate) {
+      arrThursday.splice(arrThursday.length - 1);
     }
-    if (arrDate5[arrDate5.length - 1] > lastDate) {
-      arrDate5.splice(arrDate5.length - 1);
+    if (arrFriday[arrFriday.length - 1] > lastDate) {
+      arrFriday.splice(arrFriday.length - 1);
     }
-    if (arrDate6[arrDate6.length - 1] > lastDate) {
-      arrDate6.splice(arrDate6.length - 1);
+    if (arrSaturday[arrSaturday.length - 1] > lastDate) {
+      arrSaturday.splice(arrSaturday.length - 1);
     }
 
-    var sequenceDay = [
-      arrDate0,
-      arrDate1,
-      arrDate2,
-      arrDate3,
-      arrDate4,
-      arrDate5,
-      arrDate6,
-    ];
     let selectedDate = [];
     for (var i = 0; i < arrChoiceDay.length; i++) {
       for (var j = 0; j < 7; j++) {
@@ -157,17 +157,10 @@ const CalendarInput = () => {
     }
     setFinalDate([...selectedDate]);
 
-    // selectedDate = [...new Set(selectedDate)];
-
-    console.log("최종날짜", selectedDate);
-
-    // console.log("일요일", arrDate0);
-    // console.log("월요일", arrDate1);
-    // console.log("화요일", arrDate2);
-    // console.log("수요일", arrDate3);
-    // console.log("목요일", arrDate4);
-    // console.log("금요일", arrDate5);
-    // console.log("토요일", arrDate6);
+    console.log(
+      yyyy + "년 " + mm + "월에 선택한 요일이 있는날짜",
+      selectedDate
+    );
   };
 
   //임시용 나중에 back에서 받아올예정
@@ -348,6 +341,9 @@ const CalendarInput = () => {
           <td>
             근무자 :{" "}
             <select onChange={worker} value={Worker}>
+              <option name="선택" value="미선택">
+                선택
+              </option>
               {workerListRendering()}
             </select>
           </td>
