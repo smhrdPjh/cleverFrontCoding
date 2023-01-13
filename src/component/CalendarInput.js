@@ -10,12 +10,15 @@ const CalendarInput = () => {
   const [PlanYear, setPlanYear] = useState(2023);
   const [PlanMonth, setPlanMonth] = useState(2);
   const [Day, setDay] = useState([]);
+  const [finalDate, setFinalDate] = useState([]);
   const date = new Date();
   var year = date.getFullYear();
   var month = date.getMonth();
 
   const getDayOfWeek = (yyyy, mm, arrChoiceDay) => {
-    console.log("요일", [arrChoiceDay]);
+    console.log("1번");
+    console.log("받아온것 :", arrChoiceDay);
+    // console.log("요일", [arrChoiceDay]);
     //특정date1의 마지막날        년, date1
     let lastDate = new Date(yyyy, mm, 0).getDate();
 
@@ -142,7 +145,7 @@ const CalendarInput = () => {
       arrDate5,
       arrDate6,
     ];
-    var selectedDate = [];
+    let selectedDate = [];
     for (var i = 0; i < arrChoiceDay.length; i++) {
       for (var j = 0; j < 7; j++) {
         if (Number(arrChoiceDay[i]) === j) {
@@ -152,17 +155,19 @@ const CalendarInput = () => {
         }
       }
     }
+    setFinalDate([...selectedDate]);
+
+    // selectedDate = [...new Set(selectedDate)];
 
     console.log("최종날짜", selectedDate);
 
-    console.log("일요일", arrDate0);
-    console.log("월요일", arrDate1);
-    console.log("화요일", arrDate2);
-    console.log("수요일", arrDate3);
-    console.log("목요일", arrDate4);
-    console.log("금요일", arrDate5);
-    console.log("토요일", arrDate6);
-    return dayOfWeek;
+    // console.log("일요일", arrDate0);
+    // console.log("월요일", arrDate1);
+    // console.log("화요일", arrDate2);
+    // console.log("수요일", arrDate3);
+    // console.log("목요일", arrDate4);
+    // console.log("금요일", arrDate5);
+    // console.log("토요일", arrDate6);
   };
 
   //임시용 나중에 back에서 받아올예정
@@ -174,6 +179,7 @@ const CalendarInput = () => {
   ];
 
   const workerListRendering = () => {
+    console.log("2번");
     const arrWorker = [];
     for (let i = 0; i < workerList.length; i++) {
       arrWorker.push(
@@ -186,6 +192,7 @@ const CalendarInput = () => {
   };
 
   const hrListRendering = () => {
+    console.log("3번");
     const arrHr = [];
     for (let i = 0; i < 24; i++) {
       arrHr.push(<option value={i}>{i}</option>);
@@ -195,6 +202,7 @@ const CalendarInput = () => {
   };
 
   const minitListRendering = () => {
+    console.log("4번");
     let sum = 0;
     const arrMinit = [];
     for (let i = 0; i < 51; i += 10) {
@@ -204,30 +212,38 @@ const CalendarInput = () => {
   };
 
   const planYear = (e) => {
+    console.log("5번");
     setPlanYear(e.target.value);
   };
   const planMonth = (e) => {
+    console.log("6번");
     setPlanMonth(e.target.value);
   };
 
   const planStartHr = (e) => {
+    console.log("7번");
     setPlanStartHr(e.target.value);
   };
   const planStartMin = (e) => {
+    console.log("8번");
     setPlanStartMin(e.target.value);
   };
   const planEndHr = (e) => {
+    console.log("9번");
     setPlanEndHr(e.target.value);
   };
   const planEndMin = (e) => {
+    console.log("10번");
     setPlanEndMin(e.target.value);
   };
   const worker = (e) => {
+    console.log("11번");
     setWorker(e.target.value);
   };
 
   // 선택한 요일값 setDay하기
   const day = (e) => {
+    console.log("11번");
     if (e.target.checked && !checkOn.includes(e.target.value)) {
       checkOn.push(e.target.value);
     } else if (!e.target.checked && checkOn.includes(e.target.value)) {
@@ -238,12 +254,17 @@ const CalendarInput = () => {
         }
       }
     }
+
     setDay([...checkOn]);
+
     // ...: 스프레드 문법
+
     console.log(" 체크온 :", checkOn);
+    getDayOfWeek(PlanYear, PlanMonth, checkOn);
   };
 
   const checkBoxDay = () => {
+    console.log("12번");
     const arrDay = ["일", "월", "화", "수", "목", "금", "토"];
     let arrDays = arrDay.map((item, index) => {
       return (
@@ -259,9 +280,11 @@ const CalendarInput = () => {
         </>
       );
     });
+
     return arrDays;
   };
   const selectYear = () => {
+    console.log("13번");
     const arrYear = [];
     for (var i = 0; i < 11; i++) {
       arrYear.push(year + i);
@@ -281,6 +304,7 @@ const CalendarInput = () => {
   };
 
   const selectMonth = () => {
+    console.log("14번");
     const arrMonth = [];
     for (var i = 1; i < 13; i++) {
       arrMonth.push(i);
@@ -295,8 +319,15 @@ const CalendarInput = () => {
         </>
       );
     });
+
     return optionMonth;
   };
+  // useEffect(() => {
+  //   console.log("유스이펙트1");
+
+  //   getDayOfWeek(PlanYear, PlanMonth, 2);
+  //   console.log("유스이펙트2");
+  // });
 
   return (
     <div>
@@ -342,6 +373,7 @@ const CalendarInput = () => {
             :분{" "}
           </td>
 
+          <br />
           <p>
             직원: {Worker}
             <br />
@@ -356,12 +388,11 @@ const CalendarInput = () => {
             요일 : {Day}
             <br />년 : {PlanYear}
             <br />월 : {PlanMonth}
+            <br />
+            날짜 : {finalDate}
           </p>
         </tr>
-
-        <button onClick={getDayOfWeek(PlanYear, PlanMonth, Day)}>
-          등록하기
-        </button>
+        <button>등록</button>
       </form>
     </div>
   );
