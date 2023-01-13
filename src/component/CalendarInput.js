@@ -213,10 +213,12 @@ const CalendarInput = () => {
 
   const planYear = (e) => {
     console.log("5번");
+    getDayOfWeek(e.target.value, PlanMonth, checkOn);
     setPlanYear(e.target.value);
   };
   const planMonth = (e) => {
     console.log("6번");
+    getDayOfWeek(PlanYear, e.target.value, checkOn);
     setPlanMonth(e.target.value);
   };
 
