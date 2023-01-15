@@ -4,18 +4,51 @@ import React, { useEffect, useState } from "react";
 import "../style/calendar.css";
 import googleCalendar from "@fullcalendar/google-calendar";
 import interaction from "@fullcalendar/interaction";
+var countNum = 0;
+var thisDayList = [
+    
+  {
+  workerName: '박진형',
+  startHr: "16",
+  startMin: "10",
+  endHr : "21",
+  endMin : "10"
 
+}, {
+  workerName: '박형주',
+  startHr: "09",
+  startMin : "10",
+  endHr : "16",
+  endMin : "10"
+
+}, {
+  workerName: '나소연',
+  startHr: "21",
+  startMin : "10",
+  endHr : "04",
+  endMin : "10"
+
+}
+]
 const Calendar = () => {
+  const [PlanStartHr, setPlanStartHr] = useState(0);
+  const [PlanStartMin, setPlanStartMin] = useState(0);
+  const [PlanEndHr, setPlanEndHr] = useState(0);
+  const [PlanEndMin, setPlanEndMin] = useState(0);
+  const [Worker, setWorker] = useState("선택");
+  const [thisDayList2,setThisDayList2]= useState([]);
   const apiKey = "AIzaSyAHG8iIVB4i-q5o7KRjdvKcwVc67JzZEWc";
-
   const date = new Date();
   const year = date.getFullYear();
   const month = date.getMonth();
   const day = date.getDate();
-  const yo = date.getDay();
   const today = year + "-" + month + 1 + "-" + day;
+  var arrAddList =[];
+  var comon = [{}] ;
+  
 
-  console.log(yo);
+  const [addCound,setAddCount]=useState(0);
+
   const [selectedDate, setSelectecDate] = useState(today);
 
   const workingTime = [{ arrive: "07:00", live: "18:00" }];
@@ -25,6 +58,209 @@ const Calendar = () => {
     { title: "07:00~15:00", date: "2023-01-02" },
     { title: "07:00~15:00", date: "2023-01-03" },
   ];
+  var workerList = [
+    {
+      workerName: '박진형',
+      startHr: "16",
+      startMin: "10",
+      endHr : "21",
+      endMin : "10"
+    
+    }, {
+      workerName: '박형주',
+      startHr: "09",
+      startMin : "10",
+      endHr : "16",
+      endMin : "10"
+    
+    }, {
+      workerName: '나소연',
+      startHr: "21",
+      startMin : "10",
+      endHr : "04",
+      endMin : "10"
+    
+    } ,{
+      workerName: '임아해',
+      startHr: "04",
+      startMin : "10",
+      endHr : "09",
+      endMin : "10"
+    
+    } 
+  ];
+  const worker = (e) => {
+  
+    setWorker(e.target.value);
+  };
+  const planStartHr = (e) => {
+    
+    setPlanStartHr(e.target.value);
+  };
+  const planStartMin = (e) => {
+
+    setPlanStartMin(e.target.value);
+  };
+  const planEndHr = (e) => {
+  
+    setPlanEndHr(e.target.value);
+  };
+  const planEndMin = (e) => {
+ 
+    setPlanEndMin(e.target.value);
+  };
+
+
+
+  
+  
+  
+  
+  const hrListRendering = () => {
+
+    const arrHr = [];
+    for (let i = 0; i < 24; i++) {
+      arrHr.push(<option value={i}>{i}</option>);
+    }
+
+    return arrHr;
+  };
+
+  const minitListRendering = () => {
+    
+    let sum = 0;
+    const arrMinit = [];
+    for (let i = 0; i < 51; i += 10) {
+      arrMinit.push(<option value={i}>{i}</option>);
+    }
+    return arrMinit;
+  };
+  
+  
+  
+  const workerListRendering = () => {       
+    var result = workerList.map((item,index)=>{
+      console.log("렌더링",index);
+      return(
+        <option key={index}>
+        {item.workerName}
+      </option>
+      );
+    })
+    return result;
+  };
+
+  const todayWorkerRendering = ()=>{
+    var result = thisDayList.map((item,index)=>{
+
+      return(
+      <option key={index} >
+       {item.workerName}
+      </option>
+
+      );
+    })
+    return result;
+  }
+
+
+const planModification = ()=>{
+
+  console.log("여긴바로됨?");
+
+ var result = thisDayList.map((item,index)=>{
+  console.log("아이템뭐냐",item.workerName);
+  return(
+  <tr>  
+
+        <select onChange={worker} defaultValue={item.workerName}>
+          {console.log("현재 직원",item.workerName)}
+       {todayWorkerRendering()}
+            
+            </select>
+
+    
+     <input type="time" defaultValue={item.startHr+':'+item.startMin}/>   
+      ~            
+      <input type="time" defaultValue={item.endHr+':'+item.endMin}/> 
+      <button onClick={()=>{deleteList(index)}}>삭제</button>
+             
+          </tr>
+);
+  })
+
+return result;
+  
+}
+
+
+  
+const addModification =()=>{    
+  
+ 
+  for(var i=0; i<addCound; i++){
+     arrAddList.push(i);
+  }
+
+  let result = arrAddList.map((item,index)=>{
+
+      return(
+        
+        <tr>
+        <select key = {index} onChange={()=>{addName(index)}}>
+       {workerListRendering()}            
+        </select>
+
+    
+     <input key = {index} type="time" onChange={console.log("변화 됬냐")}/>   
+      ~            
+      <input key = {index} type="time" onChange={()=>{addEnd(index)}}/> 
+      <button onClick={()=>{deleteList(index)}}>삭제</button>      
+    </tr>    
+      
+     );     
+     
+    })
+
+    
+
+
+   return result;
+
+      } 
+
+      const deleteList = (e)=>{
+        thisDayList.splice(e, 1);
+        console.log("삭제"+e);
+        console.log("삭제후 리스트",thisDayList);
+        setThisDayList2([...thisDayList]);                    
+  }
+
+  const addName = (e)=>{
+
+    comon.push( e.target.value);
+
+    console.log("추가됬냐",comon)
+
+  }
+  const addStart = (e)=>{
+
+    thisDayList[e].push({startTime : e.target.value});
+
+  }
+  const addEnd = (e)=>{
+
+    thisDayList[e].push({endTime : e.target.value});
+
+  }
+
+  const submitModification = ()=>{
+
+  }
+
+
+  
+
 
   return (
     <div className="container">
@@ -42,7 +278,7 @@ const Calendar = () => {
           googleCalendarApiKey={apiKey} // apiKey
           locale="ko" //한글 버전
           selectable={true}
-          height={650}
+          height={700}
           //이벤트
           eventSources={[
             {
@@ -91,7 +327,23 @@ const Calendar = () => {
                 박진형 : {workingTime[0].arrive} - {workingTime[0].live}
               </h3>
             </tr>
+            <button id="button1" >수정하기</button>
           </table>
+          
+        </div>
+        <div>
+        
+        
+        {planModification()}
+        {addModification()}
+  
+        <button onClick={()=>{++countNum;
+     setAddCount(countNum);}}>+추가</button>
+     <input type="submit" name="등록" value="등록" onClick={submitModification()}></input>
+        <tr>
+         
+        </tr>
+
         </div>
 
         <div className="special">
@@ -107,6 +359,7 @@ const Calendar = () => {
       </div>
     </div>
   );
-};
+        }
+
 
 export default Calendar;

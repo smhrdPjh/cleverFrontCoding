@@ -298,6 +298,9 @@ const CalendarInput = () => {
     return arrYears;
   };
 
+
+  
+
   const selectMonth = () => {
     console.log("14번");
     const arrMonth = [];
@@ -317,12 +320,7 @@ const CalendarInput = () => {
 
     return optionMonth;
   };
-  // useEffect(() => {
-  //   console.log("유스이펙트1");
-
-  //   getDayOfWeek(PlanYear, PlanMonth, 2);
-  //   console.log("유스이펙트2");
-  // });
+ 
 
   return (
     <div>
