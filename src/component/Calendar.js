@@ -5,6 +5,19 @@ import "../style/calendar.css";
 import googleCalendar from "@fullcalendar/google-calendar";
 import interaction from "@fullcalendar/interaction";
 var countNum = 0;
+var totalList = [];
+for (var i = 0; i < 10; i++) {
+  totalList.push([
+    {
+      workerName: "",
+      startHr: "",
+      startMin: "",
+      endHr: "",
+      endMin: "",
+    },
+  ]);
+}
+
 var thisDayList = [
   {
     workerName: "박진형",
@@ -35,6 +48,7 @@ const Calendar = () => {
   const [PlanEndMin, setPlanEndMin] = useState(0);
   const [Worker, setWorker] = useState("선택");
   const [thisDayList2, setThisDayList2] = useState([]);
+  const [arrAddListState, setArrAddListState] = [];
   const apiKey = "AIzaSyAHG8iIVB4i-q5o7KRjdvKcwVc67JzZEWc";
   const date = new Date();
   const year = date.getFullYear();
@@ -179,12 +193,33 @@ const Calendar = () => {
     let result = arrAddList.map((item, index) => {
       return (
         <tr>
-          <select key={index}>{workerListRendering()}</select>
-          <input key={index} type="time" />
+          <select
+            key={index}
+            onChange={(e) => {
+              totalList[index].workerName = e.target.value;
+            }}
+          >
+            {workerListRendering()}
+          </select>
+          <input
+            key={index}
+            type="time"
+            onChange={(e) => {
+              totalList[index].startHr = e.target.value;
+            }}
+          />
           ~
-          <input key={index} type="time" />
+          <input
+            key={index}
+            type="time"
+            onChange={(e) => {
+              totalList[index].endHr = e.target.value;
+            }}
+          />
+          {console.log("결과", totalList)}
           <button
             onClick={() => {
+              totalList.splice(index, 1);
               arrAddList.splice(index, 1);
               countNumRef.current -= 1;
               setAddCount(countNumRef.current);
@@ -277,12 +312,14 @@ const Calendar = () => {
         </div>
         <div>
           {planModification()}
+
           {addModification()}
 
           <button
             onClick={() => {
               console.log("ref", countNumRef.current);
               countNumRef.current += 1;
+
               setAddCount(countNumRef.current);
             }}
           >
