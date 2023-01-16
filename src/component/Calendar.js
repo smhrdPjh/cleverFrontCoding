@@ -135,7 +135,6 @@ const Calendar = () => {
 
   const workerListRendering = () => {
     var result = workerList.map((item, index) => {
-      console.log("렌더링", index);
       return <option key={index}>{item.workerName}</option>;
     });
     return result;
@@ -151,9 +150,9 @@ const Calendar = () => {
   const planModification = () => {
     var result = thisDayList.map((item, index) => {
       return (
-        <tr>
+        <tr key={`${item.workerName}${index}`}>
           <select onChange={worker} defaultValue={item.workerName}>
-            {todayWorkerRendering()}
+            {workerListRendering()}
           </select>
           <input
             type="time"
