@@ -4,12 +4,7 @@ import React, { useEffect, useState, useRef } from "react";
 import "../style/calendar.css";
 import googleCalendar from "@fullcalendar/google-calendar";
 import interaction from "@fullcalendar/interaction";
-var countNum = 0;
-var totalList = [{}];
-for (var i = 0; i < 20; i++) {
-  totalList.push([]);
-}
-
+import { v4 as uuidv4 } from "uuid";
 var thisDayList = [
   {
     workerName: "박진형",
@@ -28,7 +23,8 @@ var thisDayList = [
   },
 ];
 const Calendar = () => {
-  const [thisDayListState, setThisDayListState] = useState([]);
+  const [thisDayListState, setThisDayListState] = useState([thisDayList]);
+  const [arrAddListState, setArrAddListState] = useState([]);
 
   const apiKey = "AIzaSyAHG8iIVB4i-q5o7KRjdvKcwVc67JzZEWc";
   const date = new Date();
@@ -36,15 +32,12 @@ const Calendar = () => {
   const month = date.getMonth();
   const day = date.getDate();
   const today = year + "-" + month + 1 + "-" + day;
-  var arrAddList = [];
-  var countNumRef = useRef(0);
-
+  let arrAddList = useRef([]);
   const [addCount, setAddCount] = useState(0);
-
   const [selectedDate, setSelectecDate] = useState(today);
-
   const workingTime = [{ arrive: "07:00", live: "18:00" }];
-
+  console.log("리스트상태", arrAddList.current);
+  var countNumRef = useRef(0);
   const setSchedul = [
     { title: "07:00~15:00", date: "2023-01-01" },
     { title: "07:00~15:00", date: "2023-01-02" },
@@ -127,49 +120,37 @@ const Calendar = () => {
   };
 
   const addModification = () => {
-    console.log("addcount", addCount);
-    for (var i = 0; i < addCount; i++) {
-      arrAddList.push([
-        {
-          workerName: "",
-          startTime: "",
-          endTime: "",
-        },
-      ]);
-    }
-    console.log("리스트", arrAddList);
-
-    let result = arrAddList.map((item, index) => {
+    console.log("함수안에서 상태", arrAddList.current);
+    let result = arrAddList.current.map((item, index) => {
       return (
-        <tr key={`${item.workerName}${index + 1}`}>
+        <tr key={uuidv4()}>
           <select
+            defaultValue={item.workerName}
             onChange={(e) => {
-              totalList[index].workerName = e.target.value;
+              arrAddList.current[index].workerName = e.target.value;
             }}
           >
             {workerListRendering()}
           </select>
           <input
             type="time"
+            defaultValue={item.startTime}
             onChange={(e) => {
-              totalList[index].startTime = e.target.value;
+              arrAddList.current[index].startTime = e.target.value;
             }}
           />
           ~
           <input
+            defaultValue={item.endTime}
             type="time"
             onChange={(e) => {
-              totalList[index].endTime = e.target.value;
+              arrAddList.current[index].endTime = e.target.value;
             }}
           />
-          {console.log("추가된배열", totalList)}
           <button
             onClick={() => {
-              totalList.splice(index, 1);
-              arrAddList.splice(index, 1);
-              countNumRef.current -= 1;
-              console.log("삭제" + index);
-              setAddCount(countNumRef.current);
+              arrAddList.current.splice(index, 1);
+              setArrAddListState([arrAddList.current]);
             }}
           >
             삭제
@@ -180,11 +161,18 @@ const Calendar = () => {
     return result;
   };
 
-  const submitModification = () => {
-    totalList.splice(addCount, totalList.length);
-    console.log("최종배열", thisDayList.concat(totalList));
+  const pushArrAddList = () => {
+    arrAddList.current.push({
+      workerName: "",
+      startTime: "",
+      endTime: "",
+    });
   };
 
+  const submitModification = () => {
+    console.log("최종배열", thisDayList.concat(arrAddList.current));
+  };
+  console.log("상태 :", arrAddListState);
   return (
     <div className="container">
       <div className="calendar">
@@ -255,15 +243,12 @@ const Calendar = () => {
         </div>
         <div>
           {planModification()}
-
           {addModification()}
 
           <button
             onClick={() => {
-              console.log("ref", countNumRef.current);
-              countNumRef.current += 1;
-
-              setAddCount(countNumRef.current);
+              pushArrAddList();
+              setArrAddListState([arrAddList.current]);
             }}
           >
             +추가
