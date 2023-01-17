@@ -12,24 +12,63 @@ const month = date.getMonth();
 const day = date.getDate();
 const today = year + "-" + month + 1 + "-" + day;
 
+var workerList = [
+  { workerName: "선택", startTime: "16:10", endTime: "21:10" },
+  {
+    workerName: "박진형",
+    startTime: "16:10",
+    endTime: "21:10",
+  },
+  {
+    workerName: "박형주",
+    startTime: "09:10",
+    endTime: "16:10",
+  },
+  {
+    workerName: "나소연",
+    startTime: "21:10",
+    endTime: "04:10",
+  },
+  {
+    workerName: "임아해",
+    startTime: "04:10",
+    endTime: "09:10",
+  },
+];
+const workerListRendering = () => {
+  
+  var result = workerList.map((item, index) => {
+    return <option key={index}>{item.workerName}</option>;
+  });
+  return result;
+};
+
 const CalendarPage = () => {
+  const [workerName, setWorkerName]= useState("");
   const apiKey = "AIzaSyAHG8iIVB4i-q5o7KRjdvKcwVc67JzZEWc";
   const [selectedDate, setSelectecDate] = useState(today);
 
-  const setSchedul = [
-    { title: "07:00~15:00", date: "2023-01-01" },
-    { title: "07:00~15:00", date: "2023-01-02" },
-    { title: "07:00~15:00", date: "2023-01-03" },
-  ];
 
+  console.log("클릭한날짜",selectedDate);
+  const setSchedul = [];
+
+  for(var i=1 ; i<20; i++ ){
+    if(i<10){
+   setSchedul.push({title:"07:00~15:00", date : "2023010"+i})
+    }else{
+      setSchedul.push({title:"07:00~15:00", date : "202301"+i})
+    }
+  }
+  console.log(setSchedul);
+
+
+console.log("유저 : ", workerName);
   return (
+    
     <div className="calendar">
-      <select>
-        <option value="jin">박진형</option>
-        <option value="bro">박형주</option>
-        <option value="so">나소연</option>
-        <option value="ah">임아해</option>
-        <option value="all">전체보기</option>
+      
+      <select onChange={(e)=>{setWorkerName(e.target.value)}}>
+        {workerListRendering()}
       </select>
       <FullCalendar
         dafaultView="dayGriMonth"
@@ -52,8 +91,12 @@ const CalendarPage = () => {
           alert(info.date + info.event.title);
           info.el.style.borderColor = "red";
         }}
+        
         dateClick={function (info) {
+          alert(info.dateStr,'클릭함')  
+                  
           setSelectecDate(info.dateStr);
+        
         }}
         businessHours={[
           {
@@ -72,12 +115,19 @@ const CalendarPage = () => {
             weekday: "long",
           },
         ]}
+        
       />
+          
+   
     </div>
+    
+   
   );
 };
 
-const CalendarDetail = () => {
+
+const CalendarDetail = (props) => {
+console.log("props",props.selectedDate);
   var thisDayList = useRef([
     {
       workerName: "박진형",
@@ -93,7 +143,7 @@ const CalendarDetail = () => {
       workerName: "나소연",
       startTime: "21:10",
       endTime: "04:10",
-    },
+    }
   ]);
 
   const [thisDayListState, setThisDayListState] = useState([]);
@@ -104,36 +154,9 @@ const CalendarDetail = () => {
   const workingTime = [{ arrive: "07:00", live: "18:00" }];
   console.log("리스트상태", arrAddList.current);
 
-  var workerList = [
-    { workerName: "선택", startTime: "16:10", endTime: "21:10" },
-    {
-      workerName: "박진형",
-      startTime: "16:10",
-      endTime: "21:10",
-    },
-    {
-      workerName: "박형주",
-      startTime: "09:10",
-      endTime: "16:10",
-    },
-    {
-      workerName: "나소연",
-      startTime: "21:10",
-      endTime: "04:10",
-    },
-    {
-      workerName: "임아해",
-      startTime: "04:10",
-      endTime: "09:10",
-    },
-  ];
+ 
 
-  const workerListRendering = () => {
-    var result = workerList.map((item, index) => {
-      return <option key={index}>{item.workerName}</option>;
-    });
-    return result;
-  };
+ 
 
   const planModification = () => {
     var result = thisDayList.current.map((item, index) => {
@@ -237,7 +260,7 @@ const CalendarDetail = () => {
       <div className="table">
         <table>
           <tr align="center">
-            <h1>{}</h1>
+            <h1>{props.selectedDate}</h1>
           </tr>
           <tr align="left">
             <h3>
@@ -287,7 +310,8 @@ const Calendar = () => {
   return (
     <div className="container">
       <CalendarPage />
-      <CalendarDetail />
+      
+    
     </div>
   );
 };
