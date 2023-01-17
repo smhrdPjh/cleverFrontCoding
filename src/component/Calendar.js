@@ -5,44 +5,30 @@ import "../style/calendar.css";
 import googleCalendar from "@fullcalendar/google-calendar";
 import interaction from "@fullcalendar/interaction";
 var countNum = 0;
-var totalList = [];
-for (var i = 0; i < 10; i++) {
-  totalList.push([
-    {
-      workerName: "",
-      startHr: "",
-      startMin: "",
-      endHr: "",
-      endMin: "",
-    },
-  ]);
+var totalList = [{}];
+for (var i = 0; i < 20; i++) {
+  totalList.push([]);
 }
 
 var thisDayList = [
   {
     workerName: "박진형",
-    startHr: "16",
-    startMin: "10",
-    endHr: "21",
-    endMin: "10",
+    startTime: "16:10",
+    endTime: "21:10",
   },
   {
     workerName: "박형주",
-    startHr: "09",
-    startMin: "10",
-    endHr: "16",
-    endMin: "10",
+    startTime: "09:10",
+    endTime: "16:10",
   },
   {
     workerName: "나소연",
-    startHr: "21",
-    startMin: "10",
-    endHr: "04",
-    endMin: "10",
+    startTime: "21:10",
+    endTime: "04:10",
   },
 ];
 const Calendar = () => {
-  const [thisDayList2, setThisDayList2] = useState([]);
+  const [thisDayListState, setThisDayListState] = useState([]);
 
   const apiKey = "AIzaSyAHG8iIVB4i-q5o7KRjdvKcwVc67JzZEWc";
   const date = new Date();
@@ -65,33 +51,26 @@ const Calendar = () => {
     { title: "07:00~15:00", date: "2023-01-03" },
   ];
   var workerList = [
+    { workerName: "선택", startTime: "16:10", endTime: "21:10" },
     {
       workerName: "박진형",
-      startHr: "16",
-      startMin: "10",
-      endHr: "21",
-      endMin: "10",
+      startTime: "16:10",
+      endTime: "21:10",
     },
     {
       workerName: "박형주",
-      startHr: "09",
-      startMin: "10",
-      endHr: "16",
-      endMin: "10",
+      startTime: "09:10",
+      endTime: "16:10",
     },
     {
       workerName: "나소연",
-      startHr: "21",
-      startMin: "10",
-      endHr: "04",
-      endMin: "10",
+      startTime: "21:10",
+      endTime: "04:10",
     },
     {
       workerName: "임아해",
-      startHr: "04",
-      startMin: "10",
-      endHr: "09",
-      endMin: "10",
+      startTime: "04:10",
+      endTime: "09:10",
     },
   ];
 
@@ -116,23 +95,26 @@ const Calendar = () => {
           </select>
           <input
             type="time"
-            defaultValue={item.startHr + ":" + item.startMin}
+            defaultValue={item.startTime}
             onChange={(e) => {
-              thisDayList[index].startHr = e.target.value;
+              thisDayList[index].startTime = e.target.value;
             }}
           />
           ~
           <input
             type="time"
-            defaultValue={item.endHr + ":" + item.endMin}
+            defaultValue={item.endTime}
             onChange={(e) => {
-              thisDayList[index].endHr = e.target.value;
+              thisDayList[index].endTime = e.target.value;
               console.log("투데이배열", thisDayList);
             }}
           />
           <button
             onClick={() => {
-              deleteList(index);
+              thisDayList.splice(index, 1);
+              console.log("삭제" + index);
+              console.log("삭제후 리스트", thisDayList);
+              setThisDayListState([...thisDayList]);
             }}
           >
             삭제
@@ -150,10 +132,8 @@ const Calendar = () => {
       arrAddList.push([
         {
           workerName: "",
-          startHr: "",
-          startMin: "",
-          endHr: "",
-          endMin: "",
+          startTime: "",
+          endTime: "",
         },
       ]);
     }
@@ -161,9 +141,8 @@ const Calendar = () => {
 
     let result = arrAddList.map((item, index) => {
       return (
-        <tr>
+        <tr key={`${item.workerName}${index + 1}`}>
           <select
-            key={index}
             onChange={(e) => {
               totalList[index].workerName = e.target.value;
             }}
@@ -171,18 +150,16 @@ const Calendar = () => {
             {workerListRendering()}
           </select>
           <input
-            key={index}
             type="time"
             onChange={(e) => {
-              totalList[index].startHr = e.target.value;
+              totalList[index].startTime = e.target.value;
             }}
           />
           ~
           <input
-            key={index}
             type="time"
             onChange={(e) => {
-              totalList[index].endHr = e.target.value;
+              totalList[index].endTime = e.target.value;
             }}
           />
           {console.log("추가된배열", totalList)}
@@ -191,6 +168,7 @@ const Calendar = () => {
               totalList.splice(index, 1);
               arrAddList.splice(index, 1);
               countNumRef.current -= 1;
+              console.log("삭제" + index);
               setAddCount(countNumRef.current);
             }}
           >
@@ -200,13 +178,6 @@ const Calendar = () => {
       );
     });
     return result;
-  };
-
-  const deleteList = (e) => {
-    thisDayList.splice(e, 1);
-    console.log("삭제" + e);
-    console.log("삭제후 리스트", thisDayList);
-    setThisDayList2([...thisDayList]);
   };
 
   const submitModification = () => {

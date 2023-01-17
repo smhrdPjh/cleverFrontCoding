@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 let checkOn = [];
 const CalendarInput = () => {
-  const [PlanStartHr, setPlanStartHr] = useState(0);
-  const [PlanStartMin, setPlanStartMin] = useState(0);
-  const [PlanEndHr, setPlanEndHr] = useState(0);
-  const [PlanEndMin, setPlanEndMin] = useState(0);
+  const [startTime, setStartTime] = useState(0);
+  const [endTime, setEndTime] = useState(0);
   const [Worker, setWorker] = useState("선택");
   const [PlanYear, setPlanYear] = useState(2023);
   const [PlanMonth, setPlanMonth] = useState(2);
@@ -155,6 +153,7 @@ const CalendarInput = () => {
         }
       }
     }
+    // selectedDate.sort((a, b) => b - a);
     setFinalDate([...selectedDate]);
 
     console.log(
@@ -184,26 +183,6 @@ const CalendarInput = () => {
     return arrWorker;
   };
 
-  const hrListRendering = () => {
-    console.log("3번");
-    const arrHr = [];
-    for (let i = 0; i < 24; i++) {
-      arrHr.push(<option value={i}>{i}</option>);
-    }
-
-    return arrHr;
-  };
-
-  const minitListRendering = () => {
-    console.log("4번");
-    let sum = 0;
-    const arrMinit = [];
-    for (let i = 0; i < 51; i += 10) {
-      arrMinit.push(<option value={i}>{i}</option>);
-    }
-    return arrMinit;
-  };
-
   const planYear = (e) => {
     console.log("5번");
     getDayOfWeek(e.target.value, PlanMonth, checkOn);
@@ -215,22 +194,16 @@ const CalendarInput = () => {
     setPlanMonth(e.target.value);
   };
 
-  const planStartHr = (e) => {
+  const saveStartTime = (e) => {
     console.log("7번");
-    setPlanStartHr(e.target.value);
+    setStartTime(e.target.value);
   };
-  const planStartMin = (e) => {
-    console.log("8번");
-    setPlanStartMin(e.target.value);
-  };
-  const planEndHr = (e) => {
+
+  const saveEndTime = (e) => {
     console.log("9번");
-    setPlanEndHr(e.target.value);
+    setEndTime(e.target.value);
   };
-  const planEndMin = (e) => {
-    console.log("10번");
-    setPlanEndMin(e.target.value);
-  };
+
   const worker = (e) => {
     console.log("11번");
     setWorker(e.target.value);
@@ -249,11 +222,7 @@ const CalendarInput = () => {
         }
       }
     }
-
     setDay([...checkOn]);
-
-    // ...: 스프레드 문법
-
     console.log(" 체크온 :", checkOn);
     getDayOfWeek(PlanYear, PlanMonth, checkOn);
   };
@@ -275,9 +244,9 @@ const CalendarInput = () => {
         </>
       );
     });
-
     return arrDays;
   };
+
   const selectYear = () => {
     console.log("13번");
     const arrYear = [];
@@ -314,9 +283,29 @@ const CalendarInput = () => {
         </>
       );
     });
-
     return optionMonth;
   };
+
+  // function registerSchedule() {
+  //   for(var i=0; i<finalDate.length; i++){
+  //     e.preventDefault();
+
+  //     let setSchedul = {
+  //       worker: this.state.username,
+  //       year: this.state.password,
+  //       month: this.state.firstName,
+  //       workTime: this.state.lastName,
+  //       date: finalDate[i]
+  //     };
+
+  //     ApiService.setSchedul(setSchedul)
+  //       .then((res) => {
+  //              })
+  //       .catch((err) => {
+  //         alert("일정등록시 빈칸이 없어야합니다.");
+  //       });
+  //   };
+  //   }
 
   return (
     <div>
@@ -346,45 +335,24 @@ const CalendarInput = () => {
           <td>
             {" "}
             근무시간 :{" "}
-            <select onChange={planStartHr} value={PlanStartHr}>
-              {hrListRendering()}
-            </select>{" "}
-            :시{" "}
-            <select onChange={planStartMin} value={PlanStartMin}>
-              {minitListRendering()}
-            </select>{" "}
-            :분 -
-            <select onChange={planEndHr} value={PlanEndHr}>
-              {" "}
-              {hrListRendering()}
-            </select>{" "}
-            :시 -{" "}
-            <select onChange={planEndMin} value={PlanEndMin}>
-              {minitListRendering()}
-            </select>{" "}
-            :분{" "}
+            <input type="time" name="startTime" onChange={saveStartTime} />~
+            <input type="time" name="endTime" onChange={saveEndTime} />
           </td>
 
           <br />
           <p>
             직원: {Worker}
             <br />
-            출근 시: {PlanStartHr}
-            <br />
-            출근 분: {PlanStartMin}
-            <br />
-            퇴근 시: {PlanEndHr}
-            <br />
-            퇴근 분: {PlanEndMin}
-            <br />
             요일 : {Day}
             <br />년 : {PlanYear}
             <br />월 : {PlanMonth}
             <br />
+            근무시간 : {startTime}~{endTime}
+            <br />
             날짜 : {finalDate}
           </p>
         </tr>
-        <button>등록</button>
+        {/* <button onClick={registerSchedule}>등록</button> */}
       </form>
     </div>
   );
