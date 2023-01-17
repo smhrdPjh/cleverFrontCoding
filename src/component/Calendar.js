@@ -42,13 +42,8 @@ var thisDayList = [
   },
 ];
 const Calendar = () => {
-  const [PlanStartHr, setPlanStartHr] = useState(0);
-  const [PlanStartMin, setPlanStartMin] = useState(0);
-  const [PlanEndHr, setPlanEndHr] = useState(0);
-  const [PlanEndMin, setPlanEndMin] = useState(0);
-  const [Worker, setWorker] = useState("선택");
   const [thisDayList2, setThisDayList2] = useState([]);
-  const [arrAddListState, setArrAddListState] = [];
+
   const apiKey = "AIzaSyAHG8iIVB4i-q5o7KRjdvKcwVc67JzZEWc";
   const date = new Date();
   const year = date.getFullYear();
@@ -99,49 +94,9 @@ const Calendar = () => {
       endMin: "10",
     },
   ];
-  const worker = (e) => {
-    setWorker(e.target.value);
-  };
-  const planStartHr = (e) => {
-    setPlanStartHr(e.target.value);
-  };
-  const planStartMin = (e) => {
-    setPlanStartMin(e.target.value);
-  };
-  const planEndHr = (e) => {
-    setPlanEndHr(e.target.value);
-  };
-  const planEndMin = (e) => {
-    setPlanEndMin(e.target.value);
-  };
-
-  const hrListRendering = () => {
-    const arrHr = [];
-    for (let i = 0; i < 24; i++) {
-      arrHr.push(<option value={i}>{i}</option>);
-    }
-
-    return arrHr;
-  };
-
-  const minitListRendering = () => {
-    let sum = 0;
-    const arrMinit = [];
-    for (let i = 0; i < 51; i += 10) {
-      arrMinit.push(<option value={i}>{i}</option>);
-    }
-    return arrMinit;
-  };
 
   const workerListRendering = () => {
     var result = workerList.map((item, index) => {
-      return <option key={index}>{item.workerName}</option>;
-    });
-    return result;
-  };
-
-  const todayWorkerRendering = () => {
-    var result = thisDayList.map((item, index) => {
       return <option key={index}>{item.workerName}</option>;
     });
     return result;
@@ -151,15 +106,30 @@ const Calendar = () => {
     var result = thisDayList.map((item, index) => {
       return (
         <tr key={`${item.workerName}${index}`}>
-          <select onChange={worker} defaultValue={item.workerName}>
+          <select
+            onChange={(e) => {
+              thisDayList[index].workerName = e.target.value;
+            }}
+            defaultValue={item.workerName}
+          >
             {workerListRendering()}
           </select>
           <input
             type="time"
             defaultValue={item.startHr + ":" + item.startMin}
+            onChange={(e) => {
+              thisDayList[index].startHr = e.target.value;
+            }}
           />
           ~
-          <input type="time" defaultValue={item.endHr + ":" + item.endMin} />
+          <input
+            type="time"
+            defaultValue={item.endHr + ":" + item.endMin}
+            onChange={(e) => {
+              thisDayList[index].endHr = e.target.value;
+              console.log("투데이배열", thisDayList);
+            }}
+          />
           <button
             onClick={() => {
               deleteList(index);
@@ -215,7 +185,7 @@ const Calendar = () => {
               totalList[index].endHr = e.target.value;
             }}
           />
-          {console.log("결과", totalList)}
+          {console.log("추가된배열", totalList)}
           <button
             onClick={() => {
               totalList.splice(index, 1);
@@ -239,7 +209,10 @@ const Calendar = () => {
     setThisDayList2([...thisDayList]);
   };
 
-  const submitModification = () => {};
+  const submitModification = () => {
+    totalList.splice(addCount, totalList.length);
+    console.log("최종배열", thisDayList.concat(totalList));
+  };
 
   return (
     <div className="container">
@@ -329,7 +302,7 @@ const Calendar = () => {
             type="submit"
             name="등록"
             value="등록"
-            onClick={submitModification()}
+            onClick={submitModification}
           ></input>
           <tr></tr>
         </div>

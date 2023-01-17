@@ -298,9 +298,6 @@ const CalendarInput = () => {
     return arrYears;
   };
 
-
-  
-
   const selectMonth = () => {
     console.log("14번");
     const arrMonth = [];
@@ -320,7 +317,6 @@ const CalendarInput = () => {
 
     return optionMonth;
   };
- 
 
   return (
     <div>
