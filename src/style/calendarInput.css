@@ -1,0 +1,6 @@
+.container {
+  margin-top: 200px;
+  margin-left: 200px;
+  margin-right: 100px;
+  display: flex;
+}

@@ -308,18 +308,21 @@ const CalendarInput = () => {
   //   }
 
   return (
-    <div>
+    <div className="container">
       <form>
         {checkBoxDay()}
+        <br />
         <tr>
+          <br />
           <select onChange={planYear} value={PlanYear}>
             {selectYear()}
           </select>
+          <span> </span>
           <select onChange={planMonth} value={PlanMonth}>
             {selectMonth()}
           </select>
         </tr>
-
+        <br />
         <tr>
           <td>
             근무자 :{" "}
@@ -331,6 +334,7 @@ const CalendarInput = () => {
             </select>
           </td>
         </tr>
+        <br />
         <tr>
           <td>
             {" "}
@@ -338,6 +342,9 @@ const CalendarInput = () => {
             <input type="time" name="startTime" onChange={saveStartTime} />~
             <input type="time" name="endTime" onChange={saveEndTime} />
           </td>
+          <br />
+          <br />
+          <button>등록하기</button>
 
           <br />
           <p>
