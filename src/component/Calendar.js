@@ -6,11 +6,15 @@ import googleCalendar from "@fullcalendar/google-calendar";
 import interaction from "@fullcalendar/interaction";
 import { v4 as uuidv4 } from "uuid";
 
+
+const Calendar = () =>{
+
 const date = new Date();
 const year = date.getFullYear();
 const month = date.getMonth();
 const day = date.getDate();
 const today = year + "-" + month + 1 + "-" + day;
+
 
 var workerList = [
   { workerName: "선택", startTime: "16:10", endTime: "21:10" },
@@ -43,91 +47,27 @@ const workerListRendering = () => {
   return result;
 };
 
-const CalendarPage = () => {
+
   const [workerName, setWorkerName]= useState("");
   const apiKey = "AIzaSyAHG8iIVB4i-q5o7KRjdvKcwVc67JzZEWc";
   const [selectedDate, setSelectecDate] = useState(today);
-
-
+  let arrAddList = useRef([]);
+  const [thisDayListState, setThisDayListState] = useState([]);
+  const [arrAddListState, setArrAddListState] = useState([]);
+  const workingTime = [{ arrive: "07:00", live: "18:00" }];
+  console.log("리스트상태", arrAddList.current);
   console.log("클릭한날짜",selectedDate);
-  const setSchedul = [];
+  const arrSchedule = [];
 
   for(var i=1 ; i<20; i++ ){
     if(i<10){
-   setSchedul.push({title:"07:00~15:00", date : "2023010"+i})
+   arrSchedule.push({title:"07:00~15:0"+i, date : "2023010"+i})
     }else{
-      setSchedul.push({title:"07:00~15:00", date : "202301"+i})
+      arrSchedule.push({title:"07:00~15:00", date : "202301"+i})
     }
   }
-  console.log(setSchedul);
-
-
-console.log("유저 : ", workerName);
-  return (
-    
-    <div className="calendar">
-      
-      <select onChange={(e)=>{setWorkerName(e.target.value)}}>
-        {workerListRendering()}
-      </select>
-      <FullCalendar
-        dafaultView="dayGriMonth"
-        plugins={[daygrid, googleCalendar, interaction]}
-        googleCalendarApiKey={apiKey} // apiKey
-        locale="ko" //한글 버전
-        selectable={true}
-        height={700}
-        //이벤트
-        eventSources={[
-          {
-            googleCalendarId:
-              "ko.south_korea#holiday@group.v.calendar.google.com",
-            color: "red",
-            textColor: "yellow",
-          },
-        ]}
-        events={setSchedul}
-        eventClick={function (info) {
-          alert(info.date + info.event.title);
-          info.el.style.borderColor = "red";
-        }}
-        
-        dateClick={function (info) {
-          alert(info.dateStr,'클릭함')  
-                  
-          setSelectecDate(info.dateStr);
-        
-        }}
-        businessHours={[
-          {
-            daysOfWeek: [1, 2, 3],
-          },
-          {
-            daysOfWeek: [4, 5], // Thursday, Friday
-          },
-        ]}
-        titleFormat={[
-          {
-            // will produce something like "Tuesday, September 18, 2018"
-            month: "long",
-            year: "numeric",
-            day: "numeric",
-            weekday: "long",
-          },
-        ]}
-        
-      />
-          
-   
-    </div>
-    
-   
-  );
-};
-
-
-const CalendarDetail = (props) => {
-console.log("props",props.selectedDate);
+  console.log(arrSchedule);
+  console.log("유저 : ", workerName);
   var thisDayList = useRef([
     {
       workerName: "박진형",
@@ -145,18 +85,6 @@ console.log("props",props.selectedDate);
       endTime: "04:10",
     }
   ]);
-
-  const [thisDayListState, setThisDayListState] = useState([]);
-  const [arrAddListState, setArrAddListState] = useState([]);
-
-  let arrAddList = useRef([]);
-
-  const workingTime = [{ arrive: "07:00", live: "18:00" }];
-  console.log("리스트상태", arrAddList.current);
-
- 
-
- 
 
   const planModification = () => {
     var result = thisDayList.current.map((item, index) => {
@@ -255,16 +183,90 @@ console.log("props",props.selectedDate);
   };
   console.log("상태 :", arrAddListState);
 
+
+
+
+
+const clickDetail = ()=>{
+
+  
+  var thisDate = selectedDate.replace(/-/gi, "").toString
+  for(var i=0; i<arrSchedule.length; i++){
+    console.log("date",arrSchedule[i].date);
+    console.log("selectedDate",selectedDate.replace(/-/gi, ""));
+    if(arrSchedule[i].date === selectedDate.replace(/-/gi, "")){
+      return (arrSchedule[i].title);
+      
+      
+    }
+   
+  }
+}
   return (
+    <div className="container">
+       <div className="calendar">
+      
+      <select onChange={(e)=>{setWorkerName(e.target.value)}}>
+        {workerListRendering()}
+      </select>
+      <FullCalendar
+        dafaultView="dayGriMonth"
+        plugins={[daygrid, googleCalendar, interaction]}
+        googleCalendarApiKey={apiKey} // apiKey
+        locale="ko" //한글 버전
+        selectable={true}
+        height={700}
+        //이벤트
+        eventSources={[
+          {
+            googleCalendarId:
+              "ko.south_korea#holiday@group.v.calendar.google.com",
+            color: "red",
+            textColor: "yellow",
+          },
+        ]}
+        events={arrSchedule}
+        eventClick={function (info) {
+          alert(info.date + info.event.title);
+          info.el.style.borderColor = "red";
+        }}
+        
+        dateClick={function (info) {
+          
+                  
+          setSelectecDate(info.dateStr);
+        
+        }}
+        businessHours={[
+          {
+            daysOfWeek: [1, 2, 3],
+          },
+          {
+            daysOfWeek: [4, 5], // Thursday, Friday
+          },
+        ]}
+        titleFormat={[
+          {
+            // will produce something like "Tuesday, September 18, 2018"
+            month: "long",
+            year: "numeric",
+            day: "numeric",
+            weekday: "long",
+          },
+        ]}        
+      />         
+    </div>
     <div className="calendarDetail">
       <div className="table">
         <table>
           <tr align="center">
-            <h1>{props.selectedDate}</h1>
+            <h1>{selectedDate}</h1>
           </tr>
           <tr align="left">
             <h3>
-              박진형 : {workingTime[0].arrive} - {workingTime[0].live}
+              {workerName}  {clickDetail()}
+                
+              
             </h3>
           </tr>
           <button id="button1">수정하기</button>
@@ -302,16 +304,7 @@ console.log("props",props.selectedDate);
           <td>16:00</td>
         </tr>
       </div>
-    </div>
-  );
-};
-
-const Calendar = () => {
-  return (
-    <div className="container">
-      <CalendarPage />
-      
-    
+    </div>         
     </div>
   );
 };
